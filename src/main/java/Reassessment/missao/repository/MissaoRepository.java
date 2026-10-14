@@ -1,5 +1,10 @@
 package Reassessment.missao.repository;
 
-public class MissaoRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import Reassessment.missao.Missao;
+
+public interface MissaoRepository extends JpaRepository<Missao,Long> {
+
     
 }
