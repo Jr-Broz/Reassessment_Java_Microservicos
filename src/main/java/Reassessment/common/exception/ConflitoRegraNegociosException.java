@@ -7,3 +7,7 @@ public class ConflitoRegraNegociosException extends RuntimeException{
         super(mensagem);
     }
 }
+//https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html
+// Any RuntimeException or Error triggers rollback, and any checked Exception does not.
+
+// sessao 9 e 21 d moodle

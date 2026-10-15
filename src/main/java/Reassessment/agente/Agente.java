@@ -38,7 +38,5 @@ public class Agente {
     @Enumerated(EnumType.STRING)  @Column(nullable = false)
     private statusAgente statusDoAgente = statusAgente.DISPONIVEL;
  
-    
-
 
 }

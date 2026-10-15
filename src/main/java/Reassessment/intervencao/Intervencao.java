@@ -30,18 +30,13 @@ public class Intervencao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idIntervencao;
 
-    
-    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idMissao", nullable = false)
     private Missao missao;
 
-
-
     @ManyToOne(fetch = FetchType.LAZY) 
     @JoinColumn(name = "agente_id", nullable = false)
     private Agente agente;
-
 
 
     @Column(nullable = false)
@@ -52,11 +47,8 @@ public class Intervencao {
     private String acao;
 
     
-    
     @Column(nullable = false, columnDefinition = "TEXT")
     private String justificativa;
-
-
 
     @Enumerated(EnumType.STRING) 
     @Column(nullable = false)
@@ -65,7 +57,6 @@ public class Intervencao {
 
     @Column(columnDefinition = "TEXT")
     private String resultadoObservado;
-
 
     @PrePersist 
     public void PrePersist() {

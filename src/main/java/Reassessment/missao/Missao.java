@@ -35,8 +35,6 @@ public class Missao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long missao_id;
 
-
-
     @Column(nullable = false, unique = true)
     private String codigoMissao;
 
