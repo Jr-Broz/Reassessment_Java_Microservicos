@@ -9,7 +9,7 @@ public interface EventoRepository extends JpaRepository<EventoHIstorico, Long> {
     
     List<EventoHIstorico> findByImportancia(Importancia importancia);
 
-    List<EventoHIstorico> findByDataBetween(LocalDate dataInicio, LocalDate dataFim);
+    List<EventoHIstorico> findByDataBetween(LocalDate data, LocalDate dataFim);
 
 
 }

@@ -10,19 +10,20 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Getter  
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter 
+@Setter 
+@NoArgsConstructor()
 @Table(name="agentes")
 public class Agente {
     
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long agenteID; 
+    private Long id; 
 
     @Column(nullable = false)
     private String nome;
@@ -32,10 +33,12 @@ public class Agente {
     private String matricula;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING) //sem isso o banco guarda posicao
     private Especialidade especialidade;
 
     // voltar aqui e ver isso de enumerated enum type
-    @Enumerated(EnumType.STRING)  @Column(nullable = false)
+    @Enumerated(EnumType.STRING)  
+    @Column(nullable = false)
     private statusAgente statusDoAgente = statusAgente.DISPONIVEL;
  
 

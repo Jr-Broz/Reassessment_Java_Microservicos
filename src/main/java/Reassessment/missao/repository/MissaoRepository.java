@@ -8,13 +8,11 @@ public interface MissaoRepository extends JpaRepository<Missao,Long> {
 
     List<Missao> findByStatus(statusMissao status);
     
-    List<Missao> findByStatusEmExecucao(statusMissao status);
-
-    List<Missao> findByAnomaliaID(long missao_id);
+    List<Missao> findByAnomaliaId(Long anomaliaId);
 
     List<Missao> findByAgentesId(Long agentes);
 
-    boolean existsByAgentesId(Long missao_id);
+    boolean existsByAgentesId(Long agente_Id);
 
     long countByStatus(statusMissao status);
 

@@ -11,9 +11,7 @@ import Reassessment.enums.statusAgente;
 
 public interface AgenteRepository extends JpaRepository<Agente,Long> {
 
-
-
-    List<Agente> findByStatusdoAgente(statusAgente status);
+    List<Agente> findByStatusDoAgente(statusAgente statusDoAgente);
 
     List<Agente> findByEspecialidade(Especialidade especialidadeAgente);
 
@@ -21,5 +19,5 @@ public interface AgenteRepository extends JpaRepository<Agente,Long> {
 
     Optional<Agente> findByMatricula(String matricula);
 
-    long countByQuantity(statusAgente status);
+    long countByStatusDoAgente(statusAgente statusDoAgente);
 }

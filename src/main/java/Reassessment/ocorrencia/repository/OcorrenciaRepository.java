@@ -6,5 +6,5 @@ import Reassessment.ocorrencia.Ocorrencia;
 public interface OcorrenciaRepository extends JpaRepository<Ocorrencia,Long> {
     
     // idOcorrencia ou Missao ID??
-    List<Ocorrencia> findByMissaoIdORderByInstanteAsc(Long idOcorrencia); 
+    List<Ocorrencia> findByMissaoIdOrderByInstanteAsc(Long idMissao); 
 }

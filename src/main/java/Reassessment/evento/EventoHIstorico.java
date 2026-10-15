@@ -33,7 +33,7 @@ public class EventoHIstorico {
     private String descricao;
 
     @Column(nullable = false)
-    private LocalDate dataInicio;
+    private LocalDate data;
 
     @Column(nullable = false)
     private LocalDate dataFim;

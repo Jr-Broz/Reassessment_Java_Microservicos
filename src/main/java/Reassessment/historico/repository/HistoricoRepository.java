@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import Reassessment.historico.RegistroHistorico;
 
-public interface HistoricoRepository extends JpaRepository<RegistroHistorico, Long>{
+public interface HistoricoRepository extends JpaRepository<RegistroHistorico, Long> { 
     
 
-    List<RegistroHistorico> findByAnomaliaIdOrderByInstanteAsc(Long anomalia_id);
+    List<RegistroHistorico> findByAnomaliaIdOrderByInstanteAsc(Long idAnomalia);
 }

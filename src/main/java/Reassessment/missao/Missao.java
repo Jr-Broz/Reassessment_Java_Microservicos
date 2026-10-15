@@ -33,7 +33,7 @@ public class Missao {
     
     @Id  
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long missao_id;
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String codigoMissao;
@@ -42,7 +42,8 @@ public class Missao {
     private String objetivo;
 
 
-    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "anomalia_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY) 
+    @JoinColumn(name = "anomalia_id", nullable = false)
     private Anomalia anomalia;
 
 
@@ -61,7 +62,7 @@ public class Missao {
     private statusMissao status = statusMissao.PLANEJADA;
 
     @ManyToMany 
-    @JoinTable 
+    @JoinTable(name = "missao_agentes") 
     private List<Agente> agentes = new ArrayList<>();
 
 }

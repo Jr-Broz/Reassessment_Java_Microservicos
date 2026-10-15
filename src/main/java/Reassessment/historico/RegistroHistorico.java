@@ -31,7 +31,7 @@ public class RegistroHistorico {
     private Long id;
     
     @Column(name = "anomalia_id", nullable = false)
-    private Long idAnomalia;
+    private Long anomaliaId;
 
 
     @Enumerated(EnumType.STRING)
@@ -40,7 +40,7 @@ public class RegistroHistorico {
     
 
     @Column(nullable = false)
-    private LocalDateTime instanteRegistro;
+    private LocalDateTime instante;
 
     
     @Column(nullable = false)
@@ -61,7 +61,7 @@ public class RegistroHistorico {
 
     @PrePersist
     public void PrePersist() {
-        this.instanteRegistro = LocalDateTime.now();
+        this.instante = LocalDateTime.now();
     }
 
 }

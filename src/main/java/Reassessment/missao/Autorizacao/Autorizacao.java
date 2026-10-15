@@ -38,7 +38,7 @@ public class Autorizacao {
 
 
     @ManyToOne(fetch = FetchType.LAZY) 
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @JoinColumn(name = "responsavel_id", nullable = false)
     private Usuario responsavel;
 
 

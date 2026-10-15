@@ -14,14 +14,20 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 @Entity
+@Getter 
+@Setter 
+@NoArgsConstructor 
 @Table(name="ocorrencias")
 public class Ocorrencia {
  
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idOcorrencia;
+    private Long id;
 
 
     @ManyToOne(fetch = FetchType.LAZY) 
@@ -39,7 +45,7 @@ public class Ocorrencia {
 
     @Enumerated(EnumType.STRING) 
     @Column(nullable = false)
-    private tipoOcorrencia tipoOcorrencia;
+    private tipoOcorrencia tipo;
 
     
     @Column(nullable = false)

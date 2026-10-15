@@ -28,10 +28,10 @@ public class Intervencao {
 
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idIntervencao;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idMissao", nullable = false)
+    @JoinColumn(name = "missao_id", nullable = false) //tava idMissao
     private Missao missao;
 
     @ManyToOne(fetch = FetchType.LAZY) 

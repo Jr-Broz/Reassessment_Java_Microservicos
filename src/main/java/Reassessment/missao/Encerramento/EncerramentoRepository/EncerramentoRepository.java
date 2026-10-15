@@ -8,8 +8,8 @@ public interface EncerramentoRepository extends JpaRepository<EncerramentoMissao
     
 
     // Checar  sobre id encerramento missoes
-    Optional<EncerramentoMissao> findByMissaoID(Long missao);
+    Optional<EncerramentoMissao> findByMissaoId(Long missao);
 
-    boolean existsByMissaoID(Long missao);
+    boolean existsByMissaoId(Long missao);
 
 }

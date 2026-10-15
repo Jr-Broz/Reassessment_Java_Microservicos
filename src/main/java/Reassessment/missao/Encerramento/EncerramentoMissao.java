@@ -14,9 +14,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 @Entity
+@Getter 
+@Setter 
+@NoArgsConstructor 
 @Table(name="encerramentos_missao")
 public class EncerramentoMissao {
     
