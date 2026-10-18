@@ -6,6 +6,7 @@ import Reassessment.agente.Agente;
 import Reassessment.anomalia.Anomalia;
 import Reassessment.enums.Prioridade;
 import Reassessment.enums.statusMissao;
+import Reassessment.enums.tipoMissao;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -49,6 +50,11 @@ public class Missao {
 
     @Column(nullable = false)
     private LocalDate  destinoData; 
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    tipoMissao tipo;
+
 
 
     @Column(nullable = false)

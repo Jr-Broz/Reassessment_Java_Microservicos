@@ -1,6 +1,6 @@
 package Reassessment.DTO.Painel;
 
-public class IndiceEstabilidadeResponse {
+public class IndiceEstabilidadeResponseDTO {
     
     int valor;
     String faixa;

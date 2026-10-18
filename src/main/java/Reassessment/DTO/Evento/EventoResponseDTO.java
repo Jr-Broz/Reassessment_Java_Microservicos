@@ -3,27 +3,32 @@ package Reassessment.DTO.Evento;
 import java.time.LocalDate;
 
 import Reassessment.enums.Importancia;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import Reassessment.evento.EventoHIstorico;
 
 public class EventoResponseDTO {
  
     
-    @NotNull 
     Long id;
-
-    @NotBlank 
     String titulo;
-    
     String descricao;
-
-    @NotNull 
-    LocalDate data;
-    
-    @NotBlank 
+    LocalDate data; // Data de inicio ou fim? Checar isso
     String localizacao;
-
-
-    @NotNull 
     Importancia importancia;
+
+
+
+    public  EventoResponseDTO(EventoHIstorico evento) {
+
+        this.id = evento.getId();
+        this.titulo = evento.getTitulo();
+        this.descricao = evento.getDescricao();
+        this.data = evento.getData();
+        this.localizacao = evento.getLocalizacao();
+        this.importancia = evento.getImportancia();
+    }
+
+
+
+
+
 }

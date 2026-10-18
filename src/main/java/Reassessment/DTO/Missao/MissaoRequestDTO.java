@@ -4,7 +4,7 @@ import Reassessment.enums.Prioridade;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public class MissaoRequest {
+public class MissaoRequestDTO {
 
     @NotBlank 
     String objetivo;

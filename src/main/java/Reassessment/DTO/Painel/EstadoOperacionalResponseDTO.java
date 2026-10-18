@@ -1,6 +1,6 @@
 package Reassessment.DTO.Painel;
 
-public class EstadoOperacionalResponse {
+public class EstadoOperacionalResponseDTO {
 
     long agentesDisponiveis;
 
