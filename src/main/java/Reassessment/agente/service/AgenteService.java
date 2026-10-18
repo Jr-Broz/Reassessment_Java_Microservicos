@@ -1,12 +1,11 @@
 package Reassessment.agente.service;
-
+import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import Reassessment.DTO.Agente.AgenteRequestDTO;
 import Reassessment.DTO.Agente.AgenteResponseDTO;
+import Reassessment.DTO.Agente.AlteracaoStatusAgenteRequest;
 import Reassessment.agente.Agente;
 import Reassessment.agente.repository.AgenteRepository;
 import Reassessment.common.exception.ConflitoRegraNegociosException;
@@ -31,29 +30,31 @@ public class AgenteService {
     }
 
 
-    // voltar aq
 
-    // @Transactional(readOnly = true)
-    // public List<AgenteResponseDTO> listar(statusAgente statusAgente, Especialidade especialidade){
+    @Transactional(readOnly = true)
+    public List<AgenteResponseDTO> listar(statusAgente statusAgente, Especialidade especialidade){
 
-    //     List<Agente> agentes;
+        List<Agente> agentes;
 
-    //     if(statusAgente != null ) {
+        if(statusAgente != null ) {
 
-    //         agentes = agenteRepository.findByStatusDoAgente(statusAgente);
-    //     }
-    //     else if(especialidade != null){
-    //       agentes = agenteRepository.findByEspecialidade(especialidade);
+            agentes = agenteRepository.findByStatusDoAgente(statusAgente);
+        }
+        else if(especialidade != null){
+          agentes = agenteRepository.findByEspecialidade(especialidade);
          
-    //     }
-    //     else{
-    //         agenteRepository.findAll();
-    //     }
+        }
+        else{
+            agentes = agenteRepository.findAll();
+        }
 
-    //     List<Agente> agente;
-      
-    //     return agente.stream().map(AgenteResponseDTO :: new).toList();
-    // }
+        ArrayList<AgenteResponseDTO> lista = new ArrayList<>();
+
+        for(Agente a : agentes) {
+               lista.add(new AgenteResponseDTO(a));
+        }
+        return lista;
+    }
 
 
     @Transactional(readOnly = true)
@@ -64,7 +65,7 @@ public class AgenteService {
      return new AgenteResponseDTO(agente);        
         
     } 
-
+  
 
 
  @Transactional
@@ -86,6 +87,8 @@ public class AgenteService {
     return new AgenteResponseDTO(salvo);
  }
 
+
+
   @Transactional 
   public AgenteResponseDTO atualizar(Long id, AgenteRequestDTO requestDTO) {
 
@@ -93,7 +96,7 @@ public class AgenteService {
 
     if(!requestDTO.getMatricula().equals(agente.getMatricula()) && agenteRepository.existsByMatricula(requestDTO.getMatricula())) {
 
-        throw new  DadosInvalidosException("Matricula enviada e diferente da atual. ");
+      throw new  DadosInvalidosException("Matricula enviada e diferente da atual. ");
     }
 
     agente.setNome(requestDTO.getNome());    
@@ -105,28 +108,33 @@ public class AgenteService {
   }
 
 
+  @Transactional 
+  public AgenteResponseDTO alterarStatus(Long id, AlteracaoStatusAgenteRequest dRequest) {
+  
+     Agente agente = buscarEntidade(id);
 
+     if(dRequest.getStatusAgente() == statusAgente.EM_MISSAO) {
+        throw new DadosInvalidosException("Status em missao so muda apos iniciar uma missao."); 
+     }
 
+     if(agente.getStatusDoAgente() == statusAgente.EM_MISSAO) {
+        throw new ConflitoRegraNegociosException("Agente em missao: Status so muda ao ecnerrar a missao")
+     }
 
+     agente.setStatusDoAgente(dRequest.getStatusAgente());
+     return new AgenteResponseDTO(agente);
+}
 
+  @Transactional 
+  public void excluirAgente(Long id) {
 
+    buscarEntidade(id);
 
+  if(missaoRepository.existsByAgentesId(id)) {
+    throw new ConflitoRegraNegociosException("Agente possui historico, mude para INATIVO");
 
+  }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  agenteRepository.deleteById(id);
+}
 }
