@@ -96,7 +96,7 @@ public class AgenteService {
 
     if(!requestDTO.getMatricula().equals(agente.getMatricula()) && agenteRepository.existsByMatricula(requestDTO.getMatricula())) {
 
-      throw new  DadosInvalidosException("Matricula enviada e diferente da atual. ");
+      throw new  ConflitoRegraNegociosException("Quebra de regra de negócio: Matricula enviada e diferente da atual. ");
     }
 
     agente.setNome(requestDTO.getNome());    
@@ -118,7 +118,7 @@ public class AgenteService {
      }
 
      if(agente.getStatusDoAgente() == statusAgente.EM_MISSAO) {
-        throw new ConflitoRegraNegociosException("Agente em missao: Status so muda ao ecnerrar a missao")
+        throw new ConflitoRegraNegociosException("Agente em missao: Status so muda ao ecnerrar a missao");
      }
 
      agente.setStatusDoAgente(dRequest.getStatusAgente());
@@ -137,4 +137,15 @@ public class AgenteService {
 
   agenteRepository.deleteById(id);
 }
+
+
+
+
+
+
+
+
+
+
+
 }
