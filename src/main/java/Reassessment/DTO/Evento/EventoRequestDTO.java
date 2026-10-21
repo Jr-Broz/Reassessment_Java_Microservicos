@@ -19,7 +19,6 @@ public class EventoRequestDTO {
     @NotBlank 
     String localizacao;
 
-
     @NotNull 
     Importancia importancia;
 

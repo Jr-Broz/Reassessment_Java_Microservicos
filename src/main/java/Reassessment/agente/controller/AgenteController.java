@@ -34,8 +34,6 @@ private final AgenteService agenteService;
 
 
 @GetMapping 
-
-
 public List<AgenteResponseDTO> listar(@RequestParam(required = false) statusAgente status, @RequestParam(required = false) Especialidade especialidade) {
  
     
@@ -88,29 +86,4 @@ public void excluirAgente(@PathVariable Long id) {
     
     agenteService.excluirAgente(id);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

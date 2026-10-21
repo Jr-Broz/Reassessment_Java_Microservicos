@@ -2,6 +2,7 @@ package Reassessment.evento;
 
 import java.time.LocalDate;
 
+import Reassessment.DTO.Evento.EventoResponseDTO;
 import Reassessment.enums.Importancia;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
