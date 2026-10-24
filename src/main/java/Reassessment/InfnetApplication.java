@@ -10,5 +10,7 @@ public class InfnetApplication {
 		SpringApplication.run(InfnetApplication.class, args);
 	}
 
-}
+} 
+
+//./mvnw clean compile
 // ./mvnw spring-boot:run
