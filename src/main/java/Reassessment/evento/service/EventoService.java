@@ -3,14 +3,10 @@ package Reassessment.evento.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import Reassessment.DTO.Evento.EventoRequestDTO;
 import Reassessment.DTO.Evento.EventoResponseDTO;
-import Reassessment.agente.Agente;
 import Reassessment.anomalia.repository.AnomaliaRepository;
 import Reassessment.common.exception.ConflitoRegraNegociosException;
 import Reassessment.common.exception.DadosInvalidosException;
@@ -33,21 +29,44 @@ private final AnomaliaRepository anomaliaRepository;
     }
 
 
-    @Transactional(readOnly = true)
-public List<EventoResponseDTO> listarTodosEventos(Importancia importancia, LocalDate inicio, LocalDate fim) {
+    @Transactional 
+    public EventoResponseDTO criar(EventoRequestDTO eventoRequestDTO) {
 
+        EventoHIstorico eventoHIstorico = new EventoHIstorico();
+
+        eventoHIstorico.setTitulo(eventoRequestDTO.getTitulo());
+        eventoHIstorico.setDescricao(eventoRequestDTO.getDescricao());
+        eventoHIstorico.setData(eventoRequestDTO.getData());
+        eventoHIstorico.setLocalizacao(eventoRequestDTO.getLocalizacao());
+        eventoHIstorico.setImportancia(eventoRequestDTO.getImportancia());
+
+        EventoHIstorico novoEventoSalvo = eventoRepository.save(eventoHIstorico);
+
+        return new EventoResponseDTO(novoEventoSalvo);
+
+    }
+
+    @Transactional(readOnly = true)
+public List<EventoResponseDTO> listarTodosEventos(Importancia importancia, LocalDate inicio,LocalDate fim) {
+ 
 
     List<EventoHIstorico> eventos;
 
-    if(inicio == null || fim == null) {
+    if(((inicio != null && fim == null) || (inicio == null && fim != null))) {
         throw new DadosInvalidosException("Precisa inserir as 2 datas");
 
     }
 
-    if(inicio.isAfter(fim)) {
-        throw new DadosInvalidosException("Data de inicio n pode ser depois da data do fim");
+    if(inicio != null && fim != null) {
+        
+        if(inicio.isAfter(fim)) {
+            
+            throw new DadosInvalidosException("Data de inicio n pode ser depois da data do fim");
 
+        }
+    
     }
+
 
     if(importancia != null) {
 
@@ -74,13 +93,13 @@ public List<EventoResponseDTO> listarTodosEventos(Importancia importancia, Local
 
 
 
-// @Transactional(readOnly = true)
-// public EventoResponseDTO buscarPorId(Long id) {
+@Transactional(readOnly = true)
+public EventoResponseDTO buscarPorId(Long id) {
 
-//     EventoResponseDTO eventoId =  eventoRepository.findById(id);
+    EventoHIstorico eventoId =  buscarEntidade(id);
 
-//     return eventoId;
-// }
+    return new EventoResponseDTO(eventoId);
+}
 
 
 @Transactional 
@@ -99,26 +118,17 @@ public EventoResponseDTO atualizarEvento(Long id, EventoRequestDTO dto) {
 }
 
 
+// toda anomalia precisa estar ligada a um evento. Apagar o evento deixaria anomalias “órfãs”.
+
 @Transactional 
 public void excluirEvento(Long id) {
 
     buscarEntidade(id); // ver se vai dar erro de não encontrado
 
-    if(eventoRepository.existsById(id)) {
+    if(anomaliaRepository.existsByEventoId(id)) {
         throw new ConflitoRegraNegociosException("Esse evento em especifico tem uma anomalia atrelada, não pode ser deletado.");
     }
 
     eventoRepository.deleteById(id);
 }
-
-
-
-
-
-
-
-
-
-
-
 }

@@ -1,8 +1,6 @@
 package Reassessment.evento;
 
 import java.time.LocalDate;
-
-import Reassessment.DTO.Evento.EventoResponseDTO;
 import Reassessment.enums.Importancia;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,9 +33,6 @@ public class EventoHIstorico {
 
     @Column(nullable = false)
     private LocalDate data;
-
-    @Column(nullable = false)
-    private LocalDate dataFim;
 
     @Column(nullable = false)
     private String localizacao;
