@@ -7,5 +7,20 @@ import lombok.NoArgsConstructor;
 @Service 
 @NoArgsConstructor 
 public class AnomaliaService {
+ 
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
     
 }

@@ -26,6 +26,8 @@ public class AnomaliaResponseDTO {
     public AnomaliaResponseDTO(Anomalia anomalia) {
 
         this.id = anomalia.getId();
+        this.eventoId = anomalia.getEvento().getId();
+        this.eventoTitulo = anomalia.getEvento().getTitulo();
         this.divergencia = anomalia.getDivergencia();
         this.detectadaEm = anomalia.getDetectadaEm();
         this.risco = anomalia.getRisco();
