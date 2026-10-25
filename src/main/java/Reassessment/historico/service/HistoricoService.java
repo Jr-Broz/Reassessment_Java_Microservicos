@@ -17,7 +17,7 @@ public class HistoricoService {
 
  
     
-    public void registar(Long anomaliaId, tipoRegistro tipo, String usuario, String descricao, String valorAnterior, String valorNovo) {
+    public void registrar(Long anomaliaId, tipoRegistro tipo, String usuario, String descricao, String valorAnterior, String valorNovo) {
 
         RegistroHistorico registro = new RegistroHistorico();
 
