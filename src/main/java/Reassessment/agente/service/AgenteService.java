@@ -17,7 +17,7 @@ import Reassessment.missao.repository.MissaoRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service 
-@RequiredArgsConstructor 
+@RequiredArgsConstructor  // analisar novament
 public class AgenteService {
     
     private final AgenteRepository agenteRepository;
