@@ -28,7 +28,6 @@ public class HistoricoService {
         registro.setDescricaoRegistro(descricao);
         registro.setValorAnterior(valorAnterior);
         registro.setValorNovo(valorNovo);
-        
         historicoRepository.save(registro);
     }
 

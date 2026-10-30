@@ -1,6 +1,8 @@
 package Reassessment.anomalia.service;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import Reassessment.DTO.Anomalia.AlteracaoRiscoRequest;
@@ -14,9 +16,9 @@ import Reassessment.common.exception.ConflitoRegraNegociosException;
 import Reassessment.common.exception.DadosInvalidosException;
 import Reassessment.common.exception.RecursoNaoEncontradoException;
 import Reassessment.enums.nivelRisco;
-import Reassessment.enums.statusAgente;
 import Reassessment.enums.statusAnomalia;
 import Reassessment.enums.tipoRegistro;
+import Reassessment.evento.EventoHIstorico;
 import Reassessment.evento.repository.EventoRepository;
 import Reassessment.historico.service.HistoricoService;
 import lombok.RequiredArgsConstructor;
@@ -132,14 +134,32 @@ public class AnomaliaService {
     return historicoService.listarPorAnomalia(id);
     }   
 
-// -----------------------------------
+    // -----------------------------------
 
     @Transactional
     public AnomaliaResponseDTO criar(AnomaliaRequestDTO dto) {
 
+        Optional<EventoHIstorico> evento = eventoRepository.findById(dto.getEventoID());
 
-    }
+        if(evento.isPresent() == false) {
+            throw new RecursoNaoEncontradoException("O evento" + evento + "Não foi encontrado");
+        }
         
+        Anomalia anomalia = new Anomalia();
+        anomalia.setDivergencia(dto.getDivergencia());
+        anomalia.setRisco(dto.getRisco());
+        anomalia.setOrigem(dto.getOrigem());
+        anomalia.setObservacoes(dto.getObservacoes());
+        anomalia.setEvento(evento.get());
+        
+        Anomalia salva = anomaliaRepository.save(anomalia);
+
+
+         historicoService.registrar(salva.getId(), tipoRegistro.ANOMALIA_REGISTRADA, "sistema", "Anomalia no evento" + evento.get().getTitulo(), salva.getObservacoes(), salva.getRisco().name());
+
+        return new AnomaliaResponseDTO(salva);
+        }
+
     // anomalia pertence a 1 evento na ql foi detectado
     //  se eu troca evento muda meio q seria outra anomalia praticamente
  
