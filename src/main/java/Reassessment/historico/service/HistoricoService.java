@@ -22,7 +22,7 @@ public class HistoricoService {
         RegistroHistorico registro = new RegistroHistorico();
 
         
-        registro.setId(anomaliaId);
+        registro.setAnomaliaId(anomaliaId);
         registro.setTipo_Registro(tipo);
         registro.setUsuario(usuario);
         registro.setDescricaoRegistro(descricao);
