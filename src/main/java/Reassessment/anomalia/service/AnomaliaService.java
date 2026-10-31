@@ -142,14 +142,14 @@ public class AnomaliaService {
         Optional<EventoHIstorico> evento = eventoRepository.findById(dto.getEventoID());
 
         if(evento.isPresent() == false) {
-            throw new RecursoNaoEncontradoException("O evento" + evento + "Não foi encontrado");
+            throw new RecursoNaoEncontradoException("O evento " + dto.getEventoID() + " Não foi encontrado");
         }
         
         Anomalia anomalia = new Anomalia();
         anomalia.setDivergencia(dto.getDivergencia());
         anomalia.setRisco(dto.getRisco());
         anomalia.setOrigem(dto.getOrigem());
-        anomalia.setObservacoes(dto.getObservacoes());
+        anomalia.setObservacoes(null);
         anomalia.setEvento(evento.get());
         
         Anomalia salva = anomaliaRepository.save(anomalia);

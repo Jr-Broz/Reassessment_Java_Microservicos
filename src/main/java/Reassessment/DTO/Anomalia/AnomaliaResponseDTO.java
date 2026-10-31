@@ -6,7 +6,9 @@ import Reassessment.anomalia.Anomalia;
 import Reassessment.enums.nivelRisco;
 import Reassessment.enums.origemAnomalia;
 import Reassessment.enums.statusAnomalia;
+import lombok.Getter;
 
+@Getter 
 public class AnomaliaResponseDTO {
     
     Long id;

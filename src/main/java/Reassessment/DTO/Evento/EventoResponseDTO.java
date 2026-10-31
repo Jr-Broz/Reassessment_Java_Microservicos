@@ -4,7 +4,9 @@ import java.time.LocalDate;
 
 import Reassessment.enums.Importancia;
 import Reassessment.evento.EventoHIstorico;
+import lombok.Getter;
 
+@Getter 
 public class EventoResponseDTO {
  
     

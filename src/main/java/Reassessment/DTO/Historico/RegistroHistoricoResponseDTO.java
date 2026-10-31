@@ -2,7 +2,9 @@ package Reassessment.DTO.Historico;
 import java.time.LocalDateTime;
 import Reassessment.enums.tipoRegistro;
 import Reassessment.historico.RegistroHistorico;
+import lombok.Getter;
 
+@Getter 
 public class RegistroHistoricoResponseDTO {
     
     tipoRegistro tipo;
