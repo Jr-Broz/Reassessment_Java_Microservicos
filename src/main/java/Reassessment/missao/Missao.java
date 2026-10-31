@@ -20,14 +20,13 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 
 @Entity
-@Getter 
-@Setter 
+@Data 
 @NoArgsConstructor 
 @Table(name="missoes")
 public class Missao {

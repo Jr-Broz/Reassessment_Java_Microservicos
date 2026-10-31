@@ -7,6 +7,7 @@ import Reassessment.agente.Agente;
 import Reassessment.anomalia.Anomalia;
 import Reassessment.enums.Prioridade;
 import Reassessment.enums.statusMissao;
+import Reassessment.enums.tipoMissao;
 import Reassessment.missao.Missao;
 
 public class MissaoResponseDTO {
@@ -19,8 +20,8 @@ public class MissaoResponseDTO {
     String destinoLocal;
     Prioridade prioridade;
     statusMissao status;
-    List<Agente> agente;
-
+    List<Agente> agentes;
+    tipoMissao tipo;
 
 
  //problema com esse de anomaliaID, voltar aqui dps
@@ -35,7 +36,8 @@ public class MissaoResponseDTO {
     this.destinoLocal = missao.getDestinoLocal();
     this.prioridade = missao.getPrioridade();
     this.status = missao.getStatus();
-    this.agente = missao.getAgentes();
+    this.agentes = missao.getAgentes();
+    this.tipo = missao.getTipo();
 
     }
 

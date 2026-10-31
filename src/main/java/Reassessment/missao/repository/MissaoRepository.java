@@ -16,4 +16,5 @@ public interface MissaoRepository extends JpaRepository<Missao,Long> {
 
     long countByStatus(statusMissao status);
 
+    boolean existsByCodigoMissao(String codigoMissao);
 }

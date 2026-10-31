@@ -1,6 +1,7 @@
 package Reassessment.DTO.Missao;
 import java.time.LocalDate;
 import Reassessment.enums.Prioridade;
+import Reassessment.enums.tipoMissao;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -22,4 +23,10 @@ public class MissaoRequestDTO {
 
     @NotNull 
     Prioridade prioridade;
+
+    @NotNull 
+    String codigo; 
+
+    @NotNull 
+    tipoMissao tipo;
 }

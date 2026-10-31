@@ -42,7 +42,8 @@ public class EncerramentoMissao {
     @Column(nullable = false, columnDefinition = "TEXT")
     String resumo;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     nivelImpacto impactoObservado;
 
 
