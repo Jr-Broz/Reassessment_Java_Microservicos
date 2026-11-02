@@ -1,7 +1,5 @@
 package Reassessment.missao.controller;
-
 import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,11 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
+import Reassessment.DTO.Missao.DesignacaoRequestDTO;
 import Reassessment.DTO.Missao.MissaoRequestDTO;
 import Reassessment.DTO.Missao.MissaoResponseDTO;
 import Reassessment.enums.statusMissao;
 import Reassessment.missao.service.MissaoService;
+import Reassessment.missao.service.OperacaoMissaoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class MissaoController {
  
     private final MissaoService missaoService;
+    private final OperacaoMissaoService operacaoMissaoService;
 
     @GetMapping 
     public List<MissaoResponseDTO> listar(@RequestParam(required = false) statusMissao status) {
@@ -59,8 +59,8 @@ public class MissaoController {
     }
 
 
-
-
-
-
+    @PostMapping("/{id}/agentes")
+    public MissaoResponseDTO designarAgentes(@PathVariable Long id, @Valid @RequestBody DesignacaoRequestDTO dto) {
+        return operacaoMissaoService.designarAgentes(id, dto);
+    }
 }
