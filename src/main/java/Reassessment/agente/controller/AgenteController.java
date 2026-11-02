@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 import Reassessment.DTO.Agente.AgenteRequestDTO;
 import Reassessment.DTO.Agente.AgenteResponseDTO;
 import Reassessment.DTO.Agente.AlteracaoStatusAgenteRequest;
+import Reassessment.DTO.Missao.MissaoResponseDTO;
 import Reassessment.agente.service.AgenteService;
 import Reassessment.enums.Especialidade;
 import Reassessment.enums.statusAgente;
+import Reassessment.missao.service.MissaoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +33,7 @@ public class AgenteController {
     
 
 private final AgenteService agenteService;
-
+private final MissaoService missaoService;
 
 @GetMapping 
 public List<AgenteResponseDTO> listar(@RequestParam(required = false) statusAgente status, @RequestParam(required = false) Especialidade especialidade) {
@@ -86,4 +88,13 @@ public void excluirAgente(@PathVariable Long id) {
     
     agenteService.excluirAgente(id);
 }
+
+
+@GetMapping("/{id}/missoes")	
+public List<MissaoResponseDTO> listarMissoes(@PathVariable Long id)  {
+
+    return missaoService.listarPorAgente(id);
+}
+
+
 }
