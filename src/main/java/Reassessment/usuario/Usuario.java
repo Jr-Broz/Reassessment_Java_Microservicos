@@ -27,7 +27,7 @@ public class Usuario {
  
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(nullable = false, unique = true)
     private String username;
 
@@ -36,7 +36,7 @@ public class Usuario {
 
     @Enumerated(EnumType.STRING) 
     @Column(nullable = false)
-    private Perfil perfil;
+    private Perfil perfil; // OPERADOR, AGENTE, SUPERVISOR, ADMINISTRADOR
 
     @OneToOne(fetch = FetchType.LAZY) 
     @JoinColumn(name = "agente_id", unique = true)

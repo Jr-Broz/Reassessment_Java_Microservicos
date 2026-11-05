@@ -21,3 +21,7 @@ spring:
 
   flyway:
     enabled: false
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiracao-minutos: ${JWT_EXPIRACAO_MINUTOS:60}
