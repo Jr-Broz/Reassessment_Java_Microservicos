@@ -31,6 +31,7 @@ public class TokenService {
 
     }
     catch(JWTCreationException exception) {
+       
         throw new RuntimeException("Houve um erro na hora de gerar o token:  ", exception);
     }
 
@@ -46,6 +47,7 @@ public class TokenService {
 
         }
         catch(JWTVerificationException exception) {
+             System.out.println("Token recusado: " + exception.getMessage());
             return "";
         }
     }

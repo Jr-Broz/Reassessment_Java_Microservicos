@@ -20,17 +20,18 @@ private final TokenService tokenService;
 private final UsuarioDetailsService usuarioDetailsService;
 
 
+    @Override 
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain ) throws ServletException, IOException{
 
         String token = recuperarToken(request);
-
+        System.out.println("Token recebido: [" + token + "]");
         if(token != null) {
             String username = tokenService.validarToken(token);
 
             if(!username.isEmpty()) {
                 UserDetails usuario = usuarioDetailsService.loadUserByUsername(username);
 
-                var autenticacao = new UsernamePasswordAuthenticationToken(username, null, usuario.getAuthorities());
+                var autenticacao = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(autenticacao);
 
                 
@@ -47,7 +48,7 @@ private final UsuarioDetailsService usuarioDetailsService;
             return null;
         }
 
-        return authHeader.replace("Bearer", "");
+        return authHeader.replace("Bearer ", "");
     }
 
 

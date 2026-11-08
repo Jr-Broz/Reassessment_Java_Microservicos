@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
     
     private final AuthenticationManager authenticationManager;
-    private TokenService tokenService;
+    private final TokenService tokenService;
 
     @PostMapping("/login")
     public LoginResponseDTO login(@Valid  @RequestBody LoginRequestDTO dto) {
