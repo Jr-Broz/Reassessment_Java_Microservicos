@@ -1,19 +1,31 @@
 package Reassessment.missao.service;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import Reassessment.DTO.Autorizacao.AutorizacaoRequestDTO;
+import Reassessment.DTO.Autorizacao.AutorizacaoResponseDTO;
 import Reassessment.DTO.Missao.DesignacaoRequestDTO;
 import Reassessment.DTO.Missao.MissaoResponseDTO;
 import Reassessment.agente.Agente;
 import Reassessment.agente.repository.AgenteRepository;
+import Reassessment.anomalia.Anomalia;
+import Reassessment.anomalia.service.AnomaliaService;
 import Reassessment.common.exception.ConflitoRegraNegociosException;
 import Reassessment.common.exception.RecursoNaoEncontradoException;
+import Reassessment.enums.Prioridade;
+import Reassessment.enums.nivelRisco;
 import Reassessment.enums.statusAgente;
+import Reassessment.enums.statusAnomalia;
 import Reassessment.enums.statusMissao;
+import Reassessment.enums.tipoMissao;
 import Reassessment.enums.tipoRegistro;
 import Reassessment.historico.service.HistoricoService;
 import Reassessment.missao.Missao;
+import Reassessment.missao.Autorizacao.Autorizacao;
+import Reassessment.missao.Autorizacao.AutorizacaoRepository.AutorizacaoRepository;
 import Reassessment.missao.repository.MissaoRepository;
+import Reassessment.usuario.Usuario;
+import Reassessment.usuario.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service 
@@ -23,8 +35,10 @@ public class OperacaoMissaoService {
     private final  MissaoRepository missaoRepository;
     private final  AgenteRepository agenteRepository;
     private final HistoricoService historicoService;
+    private final AutorizacaoRepository autorizacaoRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    private Missao buscarMissao(Long id) {
+private Missao buscarMissao(Long id) {
 
         return missaoRepository.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Missao com ID: " + id + "  nao foi achado"));
     }
@@ -56,6 +70,82 @@ public class OperacaoMissaoService {
         }
 
         historicoService.registrar(missao.getAnomalia().getId(), tipoRegistro.AGENTES_DESIGNADOS, "sistema", "Agentes designados para missao " + missao.getCodigoMissao(), null, dto.getAgentesIds().toString());
+        return new MissaoResponseDTO(missao);
+    }
+
+    // -----------------
+
+    @Transactional 
+    public AutorizacaoResponseDTO autorizar(Long missaoId, AutorizacaoRequestDTO dto, String username) {
+
+        Missao missao = buscarMissao(missaoId);
+
+        if(missao.getStatus() != statusMissao.PLANEJADA) {
+            throw new ConflitoRegraNegociosException("So missao planejada tem como ser autorizada");
+        }
+
+        Usuario responsavel = usuarioRepository.findByUsername(username).orElseThrow(() -> new RecursoNaoEncontradoException("Usuario com nome " + username + " Nao foi encotnrad"));
+
+        Autorizacao autorizacao = new Autorizacao();
+
+        autorizacao.setMissao(missao);
+        autorizacao.setResponsavel(responsavel);
+        autorizacao.setInstante(LocalDateTime.now());
+        autorizacao.setObservacao(dto.getObservacao());
+        Autorizacao salva = autorizacaoRepository.save(autorizacao);
+
+        missao.setStatus(statusMissao.AUTORIZADA);
+        historicoService.registrar(missao.getAnomalia().getId(), tipoRegistro.MISSAO_AUTORIZADA, username, "Missao " + missao.getCodigoMissao() + " Autorizada", "PLANEJADA", "AUTORIZADA");
+        return new AutorizacaoResponseDTO(salva);
+    }
+
+
+    @Transactional 
+    public MissaoResponseDTO iniciar(Long missaoId, String username) {
+
+        Missao missao = buscarMissao(missaoId);
+
+        Anomalia anomalia = missao.getAnomalia();
+
+        if(missao.getStatus() != statusMissao.PLANEJADA && missao.getStatus() != statusMissao.AUTORIZADA) {
+            throw new ConflitoRegraNegociosException("Missao n pode ser iniciada no estado atual");
+        }
+
+        if(missao.getPrioridade() == Prioridade.EMERGENCIA && missao.getStatus() != statusMissao.AUTORIZADA) {
+            throw new ConflitoRegraNegociosException("Missao de emergencia precisa de autorizacao primeiro");
+        }
+
+        if(anomalia.getRisco() == nivelRisco.CRITICO && missao.getStatus() != statusMissao.AUTORIZADA) {
+            throw new ConflitoRegraNegociosException("Missao critica precisa ser autorizada antes de comecar");
+        }
+
+        if(missao.getAgentes().isEmpty()) {
+            throw new ConflitoRegraNegociosException("Missao precisa de pelo menos 1 agente pra poder comecar ");
+        }
+
+        if(!AnomaliaService.STATUS_ATIVOS.contains(anomalia.getStatus())) {
+            throw new ConflitoRegraNegociosException("ANOMALIA NAO TA MAIS ATIVA");
+        }
+
+        for(Agente agente : missao.getAgentes()) {
+            if(agente.getStatusDoAgente() != statusAgente.DISPONIVEL) {
+                throw new ConflitoRegraNegociosException("agente " + agente.getNome() + " Nao ta disponivel");
+
+            }
+            agente.setStatusDoAgente(statusAgente.EM_MISSAO);
+
+        }
+
+        String statusAnterior = missao.getStatus().name();            
+        missao.setStatus(statusMissao.EM_EXECUCAO);
+        historicoService.registrar(anomalia.getId(), tipoRegistro.MISSAO_INICIADA, username, "Missao " + missao.getCodigoMissao() + " iniciada", statusAnterior, "EM_EXECUCAO");
+
+        if(missao.getTipo() == tipoMissao.CORRECAO && anomalia.getStatus() != statusAnomalia.EM_CORRECAO) {
+            String anomaliaAnterior = anomalia.getStatus().name();
+            anomalia.setStatus(statusAnomalia.EM_CORRECAO);
+            historicoService.registrar(anomalia.getId(), tipoRegistro.STATUS_ALTERADO, username, "Anomalia em correcao pela missao " +  missao.getCodigoMissao(), anomaliaAnterior, "EM_CORRECAO");
+        }
+
         return new MissaoResponseDTO(missao);
     }
 }

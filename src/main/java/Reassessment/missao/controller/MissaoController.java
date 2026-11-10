@@ -1,6 +1,7 @@
 package Reassessment.missao.controller;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import Reassessment.DTO.Autorizacao.AutorizacaoRequestDTO;
+import Reassessment.DTO.Autorizacao.AutorizacaoResponseDTO;
 import Reassessment.DTO.Missao.DesignacaoRequestDTO;
 import Reassessment.DTO.Missao.MissaoRequestDTO;
 import Reassessment.DTO.Missao.MissaoResponseDTO;
@@ -62,5 +66,17 @@ public class MissaoController {
     @PostMapping("/{id}/agentes")
     public MissaoResponseDTO designarAgentes(@PathVariable Long id, @Valid @RequestBody DesignacaoRequestDTO dto) {
         return operacaoMissaoService.designarAgentes(id, dto);
+    }
+
+    @PostMapping("/{id}/autorizar")
+    @ResponseStatus(HttpStatus.CREATED)
+    public AutorizacaoResponseDTO autorizar(@PathVariable Long id, @Valid @RequestBody AutorizacaoRequestDTO dto, Authentication authentication) {
+
+        return operacaoMissaoService.autorizar(id, dto, authentication.getName());
+    }
+
+    @PostMapping("/{id}/iniciar")
+    public MissaoResponseDTO iniciar(@PathVariable Long id, Authentication authentication) {
+        return operacaoMissaoService.iniciar(id, authentication.getName());
     }
 }
