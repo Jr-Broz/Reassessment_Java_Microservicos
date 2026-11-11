@@ -25,7 +25,7 @@ public class EncerramentoResponseDTO {
     this.resultadoMissao = encerramento.getResultadoMissao();
     this.resumo =  encerramento.getResumo();
     this.impactoObservado = encerramento.getImpactoObservado();
-    this.situacaoFinalAnomalia = encerramento.getSituacaoFinalANomalia();
+    this.situacaoFinalAnomalia = encerramento.getSituacaoFinalAnomalia();
     this.observacoes = encerramento.getObservacoes();
    }
 

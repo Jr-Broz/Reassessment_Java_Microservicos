@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import Reassessment.DTO.Autorizacao.AutorizacaoRequestDTO;
 import Reassessment.DTO.Autorizacao.AutorizacaoResponseDTO;
+import Reassessment.DTO.Encerramento.EncerramentoRequestDTO;
+import Reassessment.DTO.Encerramento.EncerramentoResponseDTO;
 import Reassessment.DTO.Missao.DesignacaoRequestDTO;
 import Reassessment.DTO.Missao.MissaoRequestDTO;
 import Reassessment.DTO.Missao.MissaoResponseDTO;
@@ -79,4 +81,24 @@ public class MissaoController {
     public MissaoResponseDTO iniciar(@PathVariable Long id, Authentication authentication) {
         return operacaoMissaoService.iniciar(id, authentication.getName());
     }
+
+    @PostMapping("/{id}/encerrar")
+    @ResponseStatus(HttpStatus.CREATED)
+    public EncerramentoResponseDTO encerrar(@PathVariable  Long id, @Valid @RequestBody EncerramentoRequestDTO dto, Authentication authentication) {
+
+        return operacaoMissaoService.encerrar(id, dto, authentication.getName());
+
+    }
+
+    @PostMapping("/{id}/cancelar")
+    public MissaoResponseDTO cancelar(@PathVariable Long id, Authentication authentication) {
+
+        return operacaoMissaoService.cancelar(id, authentication.getName());
+    }
+
+
+
+
+
+
 }

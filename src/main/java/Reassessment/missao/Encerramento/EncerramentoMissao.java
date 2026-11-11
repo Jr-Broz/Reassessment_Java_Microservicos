@@ -49,7 +49,7 @@ public class EncerramentoMissao {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    statusAnomalia situacaoFinalANomalia;
+    statusAnomalia situacaoFinalAnomalia;
 
     @Column(columnDefinition = "TEXT")
     String observacoes;

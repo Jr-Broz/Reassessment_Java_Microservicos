@@ -14,3 +14,4 @@ public class InfnetApplication {
 
 //./mvnw clean compile
 // ./mvnw spring-boot:run
+// ./mvnw clean spring-boot:run

@@ -23,20 +23,29 @@ import Reassessment.historico.service.HistoricoService;
 import Reassessment.missao.Missao;
 import Reassessment.missao.Autorizacao.Autorizacao;
 import Reassessment.missao.Autorizacao.AutorizacaoRepository.AutorizacaoRepository;
+import Reassessment.missao.Encerramento.EncerramentoRepository.EncerramentoRepository;
 import Reassessment.missao.repository.MissaoRepository;
 import Reassessment.usuario.Usuario;
 import Reassessment.usuario.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import Reassessment.DTO.Encerramento.EncerramentoRequestDTO;
+import Reassessment.DTO.Encerramento.EncerramentoResponseDTO;
+import Reassessment.missao.Encerramento.EncerramentoMissao;
+import Reassessment.missao.Encerramento.EncerramentoRepository.EncerramentoRepository;
+import Reassessment.enums.nivelImpacto;
+import Reassessment.common.exception.DadosInvalidosException;
+
 
 @Service 
 @RequiredArgsConstructor 
 public class OperacaoMissaoService {
  
-    private final  MissaoRepository missaoRepository;
-    private final  AgenteRepository agenteRepository;
+    private final MissaoRepository missaoRepository;
+    private final AgenteRepository agenteRepository;
     private final HistoricoService historicoService;
     private final AutorizacaoRepository autorizacaoRepository;
     private final UsuarioRepository usuarioRepository;
+    private final EncerramentoRepository encerramentoRepository;
 
 private Missao buscarMissao(Long id) {
 
@@ -148,4 +157,83 @@ private Missao buscarMissao(Long id) {
 
         return new MissaoResponseDTO(missao);
     }
+
+    @Transactional     
+    public EncerramentoResponseDTO encerrar(Long missaoId, EncerramentoRequestDTO dto, String username) {
+
+        Missao missao = buscarMissao(missaoId);
+        Anomalia anomalia = missao.getAnomalia();
+
+        if(missao.getStatus() != statusMissao.EM_EXECUCAO) {
+            throw new ConflitoRegraNegociosException("So as missoes EM EXECUCAO podem ser encerradas");
+
+        }
+
+        if(dto.getResultadoMissao() != statusMissao.CONCLUIDA && dto.getResultadoMissao() != statusMissao.FALHOU) {
+            throw new DadosInvalidosException("A missao deve ser ou Concluida ou Falhou");
+        }
+
+        if(dto.getSituacaoFinalAnomalia() == statusAnomalia.DETECTADA || dto.getSituacaoFinalAnomalia() == statusAnomalia.EM_CORRECAO) {
+
+            throw new DadosInvalidosException("A situacao pra anomalia esta invalida");
+        }
+
+        if(dto.getResultadoMissao() == statusMissao.FALHOU && dto.getSituacaoFinalAnomalia() == statusAnomalia.ESTABILIZADA) {
+            throw new DadosInvalidosException("Missao que falhou nao pode estabilizar a anomalia");
+        }
+
+        // aq e registro do cenrramentoi
+        
+        EncerramentoMissao encerramento = new EncerramentoMissao();
+        encerramento.setMissao(missao);
+        encerramento.setResultadoMissao(dto.getResultadoMissao());
+        encerramento.setResumo(dto.getResumo());
+        encerramento.setSituacaoFinalAnomalia(dto.getSituacaoFinalAnomalia());
+        encerramento.setImpactoObservado(dto.getImpactoObservado());
+        encerramento.setObservacoes(dto.getObservacoes());
+        EncerramentoMissao salvo = encerramentoRepository.save(encerramento);
+
+        missao.setStatus(dto.getResultadoMissao());
+        historicoService.registrar(anomalia.getId(), tipoRegistro.MISSAO_ENCERRADA, username, "Missao " + missao.getCodigoMissao() + " encerrada ", "EM_EXECUCAO", dto.getResultadoMissao().name());
+
+        for(Agente agente : missao.getAgentes()) {
+
+            if(dto.getResultadoMissao() == statusMissao.FALHOU && dto.getImpactoObservado() == nivelImpacto.SEVERO) {
+                agente.setStatusDoAgente(statusAgente.SUSPENSO);
+            }
+            else {
+                agente.setStatusDoAgente(statusAgente.DISPONIVEL);
+            }
+        }
+
+        if(AnomaliaService.STATUS_ATIVOS.contains(anomalia.getStatus()) && anomalia.getStatus() != dto.getSituacaoFinalAnomalia()) {
+            String anomaliaAnteriuor = anomalia.getStatus().name();
+            anomalia.setStatus(dto.getSituacaoFinalAnomalia());
+            historicoService.registrar(anomalia.getId(), tipoRegistro.STATUS_ALTERADO, username, "Situacao final da missao " + missao.getCodigoMissao(), anomaliaAnteriuor, dto.getSituacaoFinalAnomalia().name());
+        }
+
+        return new EncerramentoResponseDTO(salvo);
+
+    }
+
+    @Transactional 
+    public MissaoResponseDTO cancelar(Long missaoId, String username) {
+        Missao missao = buscarMissao(missaoId);
+        if(missao.getStatus() != statusMissao.PLANEJADA && missao.getStatus() != statusMissao.AUTORIZADA) {
+            throw new ConflitoRegraNegociosException("So as missoes que não começaram podem ser canceladas");
+        }
+
+        String statusAnterior = missao.getStatus().name();
+        missao.setStatus(statusMissao.CANCELADA);
+        historicoService.registrar(missao.getAnomalia().getId(), tipoRegistro.MISSAO_CANCELADA, username, "Missao " + missao.getCodigoMissao() + " Cancelada", statusAnterior, "CANCELADA");
+        return new MissaoResponseDTO(missao);
+
+    }
+
+
+
+
+
+
+
 }
