@@ -10,14 +10,11 @@ public class IntervencaoRequestDTO {
     
 
     @NotNull
-    Long agenteID;
-    
+    Long agenteId;
     
     @NotBlank
     String acao;
     
-
-
     @NotBlank
     String justificativa;
     
