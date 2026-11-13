@@ -31,7 +31,6 @@ import lombok.RequiredArgsConstructor;
 import Reassessment.DTO.Encerramento.EncerramentoRequestDTO;
 import Reassessment.DTO.Encerramento.EncerramentoResponseDTO;
 import Reassessment.missao.Encerramento.EncerramentoMissao;
-import Reassessment.missao.Encerramento.EncerramentoRepository.EncerramentoRepository;
 import Reassessment.enums.nivelImpacto;
 import Reassessment.common.exception.DadosInvalidosException;
 
