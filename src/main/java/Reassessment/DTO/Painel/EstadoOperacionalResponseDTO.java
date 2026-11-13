@@ -1,13 +1,8 @@
 package Reassessment.DTO.Painel;
 
-public class EstadoOperacionalResponseDTO {
+import java.io.Serializable;
 
-    long agentesDisponiveis;
+import Reassessment.enums.estadoLinhaTemporal;
 
-
-    long agentesEmMissao;
-    long missoesEmExecucao;
-    long anomaliasAtivas;
-    long anomaliasCriticas;
-    String estadoGeral;
+public record EstadoOperacionalResponseDTO(long agentesDisponiveis, long agentesEmMissao, long missoesEmExecucao, long anomaliasAtivas, long anomaliasCriticas, int indiceEstabilidade, estadoLinhaTemporal estadoLinhaTemporal) implements Serializable{ 
 }
