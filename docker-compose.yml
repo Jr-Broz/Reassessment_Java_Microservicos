@@ -20,6 +20,12 @@ services:
     volumes:
       - mongodata:/data/db
 
+  redis:
+    image: redis:7-alpine
+    command: redis-server --requirepass ${REDIS_PASSWORD} # liga a senha do .env pq por padrao sobe sem senha
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+
 volumes:
   pgdata:
   mongodata:

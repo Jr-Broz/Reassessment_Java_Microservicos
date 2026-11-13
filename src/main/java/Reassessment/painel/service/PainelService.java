@@ -1,6 +1,6 @@
 package Reassessment.painel.service;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
 import Reassessment.DTO.Painel.EstadoOperacionalResponseDTO;
 import Reassessment.DTO.Painel.IndiceEstabilidadeResponseDTO;
 import Reassessment.agente.repository.AgenteRepository;
@@ -41,6 +41,7 @@ public class PainelService {
 
     return estadoLinhaTemporal.CRITICA;
 }
+    @Cacheable("indiceEstabilidade")
     public IndiceEstabilidadeResponseDTO indiceEstabilidade() {
 
         long ativas = anomaliaRepository.countByStatusIn(AnomaliaService.STATUS_ATIVOS);
@@ -55,7 +56,7 @@ public class PainelService {
     }
 
 
-
+    @Cacheable("estadoOperacional")
     public EstadoOperacionalResponseDTO estadoOperacional() {
 
         IndiceEstabilidadeResponseDTO indice = indiceEstabilidade();
