@@ -24,9 +24,14 @@ spring:
     redis:
       time-to-live: ${PAINEL_CACHE_TTL:30s}
 
+  sql:
+    init:
+      mode: ${SQL_INIT_MODE:always} 
+
   jpa:
     hibernate:
       ddl-auto: update
+    defer-datasource-initialization: true # so roda dps q o forem geradas as tabelas, se n ele roda antes e o insert falha
     open-in-view: false
     show-sql: true
     properties:
