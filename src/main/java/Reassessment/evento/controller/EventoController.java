@@ -33,9 +33,9 @@ private final EventoService eventoService;
 
 
 @GetMapping  
-public List<EventoResponseDTO> listar(@RequestParam(required = false) Importancia importancia , @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio) {
+public List<EventoResponseDTO> listar(@RequestParam(required = false) Importancia importancia , @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio , @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fim) {
 
-    List<EventoResponseDTO> eventos = eventoService.listarTodosEventos(importancia, null, null);
+    List<EventoResponseDTO> eventos = eventoService.listarTodosEventos(importancia, inicio, fim);
 
     return eventos;
 
@@ -58,7 +58,7 @@ public EventoResponseDTO criar(@Valid @RequestBody EventoRequestDTO dto) {
 }
 
 @PutMapping("/{id}")
-public EventoResponseDTO atuaalizar(@PathVariable Long id, @Valid @RequestBody EventoRequestDTO dto) {
+public EventoResponseDTO atualizar(@PathVariable Long id, @Valid @RequestBody EventoRequestDTO dto) {
 
     EventoResponseDTO atualizarCampo = eventoService.atualizarEvento(id, dto);
 

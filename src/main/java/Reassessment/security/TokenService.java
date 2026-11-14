@@ -14,11 +14,11 @@ public class TokenService {
 
     
     @Value("${jwt.secret}")
-    String secret;
+    private String secret;
 
 
     @Value("${jwt.expiracao-minutos}")
-    long expiracaoMinutos;
+    private long expiracaoMinutos;
 
 
     public String gerarToken(String username) {

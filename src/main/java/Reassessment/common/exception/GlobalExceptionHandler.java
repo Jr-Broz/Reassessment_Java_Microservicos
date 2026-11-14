@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -68,6 +70,31 @@ public Map<String, Object> conflitoRegras(ConflitoRegraNegociosException ex) {
 public Map<String, Object> parametroInvalido(MethodArgumentTypeMismatchException ex) {
 
     return montaErro(HttpStatus.BAD_REQUEST, ex.getName() + " INVALIDO"); // getMEssage puxa o erro inteiro, getName so o nome do parametro
+}
+
+
+
+@ExceptionHandler(AccessDeniedException.class)
+@ResponseStatus(HttpStatus.FORBIDDEN)
+public Map<String, Object> semPermissao(AccessDeniedException ex) {
+
+    return montaErro(HttpStatus.CONFLICT, ex.getMessage());
+}
+
+@ExceptionHandler(AuthenticationException.class)
+@ResponseStatus(HttpStatus.FORBIDDEN)
+public Map<String, Object> naoAutenticado(AuthenticationException ex) {
+
+    return montaErro(HttpStatus.CONFLICT, "Usuario nao autenticado, reveja senha ou login");
+}
+
+
+@ExceptionHandler(RuntimeException.class)
+@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+public Map<String, Object> erroInesperado(RuntimeException ex) {
+
+    ex.printStackTrace(); 
+    return montaErro(HttpStatus.INTERNAL_SERVER_ERROR, "erro inesperado do servidor");
 }
 
 

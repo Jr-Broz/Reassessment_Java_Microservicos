@@ -3,14 +3,15 @@ package Reassessment.DTO.Encerramento;
 import Reassessment.enums.nivelImpacto;
 import Reassessment.enums.statusAnomalia;
 import Reassessment.enums.statusMissao;
-import Reassessment.missao.Missao;
 import Reassessment.missao.Encerramento.EncerramentoMissao;
+import lombok.Getter;
 
+@Getter 
 public class EncerramentoResponseDTO {
  
     
     Long id;
-    Missao missaoID; //tava long antes
+    Long missaoID; 
     statusMissao resultadoMissao;
     String resumo;
     nivelImpacto impactoObservado;
@@ -21,7 +22,7 @@ public class EncerramentoResponseDTO {
    public EncerramentoResponseDTO(EncerramentoMissao encerramento) {
 
     this.id = encerramento.getId();
-    this.missaoID = encerramento.getMissao();
+    this.missaoID = encerramento.getMissao().getId();
     this.resultadoMissao = encerramento.getResultadoMissao();
     this.resumo =  encerramento.getResumo();
     this.impactoObservado = encerramento.getImpactoObservado();

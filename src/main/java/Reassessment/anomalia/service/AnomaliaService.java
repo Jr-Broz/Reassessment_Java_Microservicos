@@ -149,7 +149,7 @@ public class AnomaliaService {
         anomalia.setDivergencia(dto.getDivergencia());
         anomalia.setRisco(dto.getRisco());
         anomalia.setOrigem(dto.getOrigem());
-        anomalia.setObservacoes(null);
+        anomalia.setObservacoes(dto.getObservacoes());
         anomalia.setEvento(evento.get());
         
         Anomalia salva = anomaliaRepository.save(anomalia);
