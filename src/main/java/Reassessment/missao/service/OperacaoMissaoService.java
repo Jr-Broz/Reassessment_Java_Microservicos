@@ -45,6 +45,7 @@ public class OperacaoMissaoService {
     private final AutorizacaoRepository autorizacaoRepository;
     private final UsuarioRepository usuarioRepository;
     private final EncerramentoRepository encerramentoRepository;
+    
 
 private Missao buscarMissao(Long id) {
 

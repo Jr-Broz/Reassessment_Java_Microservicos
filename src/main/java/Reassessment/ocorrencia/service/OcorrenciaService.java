@@ -24,6 +24,10 @@ import Reassessment.missao.Missao;
 import Reassessment.missao.repository.MissaoRepository;
 import Reassessment.ocorrencia.Ocorrencia;
 import Reassessment.ocorrencia.repository.OcorrenciaRepository;
+import Reassessment.usuario.repository.UsuarioRepository;
+import org.springframework.security.access.AccessDeniedException;
+import Reassessment.enums.Perfil;
+import Reassessment.usuario.Usuario;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -35,11 +39,18 @@ public class OcorrenciaService {
     private final MissaoRepository missaoRepository;
     private final AgenteRepository agenteRepository;
     private final HistoricoService historicoService;
+    private final UsuarioRepository usuarioRepository;
 
     @Transactional 
     public OcorrenciaResponseDTO registrar(Long missaoId, OcorrenciaRequestDTO dto, String username) {
 
      Missao missao = missaoRepository.findById(missaoId).orElseThrow(() -> new RecursoNaoEncontradoException("MIssao com id " + missaoId + " nao foi encontrada"));
+
+        Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow(() -> new RecursoNaoEncontradoException("Usuário " + username + " não encontrado"));
+
+        if (usuario.getPerfil() == Perfil.AGENTE && (usuario.getAgente() == null || !usuario.getAgente().getId().equals(dto.getAgenteId()))) {
+            throw new AccessDeniedException("Agente n pode registrar outro nome alem do seu");
+        }
 
      if(missao.getStatus() != statusMissao.EM_EXECUCAO) {
         throw new ConflitoRegraNegociosException("somente as missoes que estao em execucao podem registrar alguma ocorrencia");

@@ -69,7 +69,7 @@ public EventoResponseDTO atuaalizar(@PathVariable Long id, @Valid @RequestBody E
 @ResponseStatus(HttpStatus.NO_CONTENT)
 public void excluirEvento(@PathVariable Long id) {
 
-    eventoService.excluirEvento(null);
+    eventoService.excluirEvento(id);
 }
 
     
