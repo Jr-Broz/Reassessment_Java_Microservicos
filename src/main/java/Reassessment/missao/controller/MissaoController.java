@@ -53,9 +53,9 @@ public class MissaoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public MissaoResponseDTO criar(@Valid @RequestBody MissaoRequestDTO dto) {
+    public MissaoResponseDTO criar(@Valid @RequestBody MissaoRequestDTO dto, Authentication authentication) {
 
-        return missaoService.criar(dto);
+        return missaoService.criar(dto, authentication.getName());
     }
 
     @PutMapping("/{id}")
@@ -66,8 +66,8 @@ public class MissaoController {
 
 
     @PostMapping("/{id}/agentes")
-    public MissaoResponseDTO designarAgentes(@PathVariable Long id, @Valid @RequestBody DesignacaoRequestDTO dto) {
-        return operacaoMissaoService.designarAgentes(id, dto);
+    public MissaoResponseDTO designarAgentes(@PathVariable Long id, @Valid @RequestBody DesignacaoRequestDTO dto, Authentication authentication) {
+        return operacaoMissaoService.designarAgentes(id, dto, authentication.getName());
     }
 
     @PostMapping("/{id}/autorizar")

@@ -1,5 +1,7 @@
 package Reassessment.missao.service;
 import java.time.LocalDateTime;
+
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import Reassessment.DTO.Autorizacao.AutorizacaoRequestDTO;
@@ -54,7 +56,7 @@ private Missao buscarMissao(Long id) {
 
 
     @Transactional 
-    public MissaoResponseDTO designarAgentes(Long missaoId, DesignacaoRequestDTO dto) {
+    public MissaoResponseDTO designarAgentes(Long missaoId, DesignacaoRequestDTO dto, String username) {
 
         Missao missao = buscarMissao(missaoId);
 
@@ -78,7 +80,7 @@ private Missao buscarMissao(Long id) {
             
         }
 
-        historicoService.registrar(missao.getAnomalia().getId(), tipoRegistro.AGENTES_DESIGNADOS, "sistema", "Agentes designados para missao " + missao.getCodigoMissao(), null, dto.getAgentesIds().toString());
+        historicoService.registrar(missao.getAnomalia().getId(), tipoRegistro.AGENTES_DESIGNADOS, username, "Agentes designados para missao " + missao.getCodigoMissao(), null, dto.getAgentesIds().toString());
         return new MissaoResponseDTO(missao);
     }
 

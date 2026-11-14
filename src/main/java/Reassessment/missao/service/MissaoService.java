@@ -113,7 +113,7 @@ public class MissaoService {
 }
 
     @Transactional
-    public MissaoResponseDTO criar(MissaoRequestDTO dto){
+    public MissaoResponseDTO criar(MissaoRequestDTO dto, String username){
 
         Anomalia anomalia = anomaliaRepository.findById(dto.getAnomaliaId()).orElseThrow(() -> new RecursoNaoEncontradoException("Anomalia com ID: " + dto.getAnomaliaId() + " nao foi achado"));
 
@@ -137,7 +137,7 @@ public class MissaoService {
 
         missaoRepository.save(salva);
 
-        historicoService.registrar(anomalia.getId(), tipoRegistro.MISSAO_CRIADA, "SISTEMA", "Missao " + dto.getCodigo() + " criada ", null, dto.getCodigo());
+        historicoService.registrar(anomalia.getId(), tipoRegistro.MISSAO_CRIADA, username, "Missao " + dto.getCodigo() + " criada ", null, dto.getCodigo());
 
         return  new MissaoResponseDTO(salva);
     }

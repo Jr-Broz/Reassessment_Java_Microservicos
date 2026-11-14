@@ -1,6 +1,6 @@
 package Reassessment.anomalia.controller;
 import java.util.List;
-
+import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -90,9 +90,9 @@ public class AnomaliaController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping 
-    public AnomaliaResponseDTO criar(@Valid @RequestBody AnomaliaRequestDTO dto) {
+    public AnomaliaResponseDTO criar(@Valid @RequestBody AnomaliaRequestDTO dto, Authentication authentication) {
 
-        return anomaliaService.criar(dto);
+        return anomaliaService.criar(dto, authentication.getName());
     }
 
     // ====================================
@@ -110,9 +110,9 @@ public class AnomaliaController {
     }
 
     @PatchMapping("/{id}/risco")
-    public AnomaliaResponseDTO alterarRisco(@PathVariable Long id, @Valid @RequestBody AlteracaoRiscoRequest dto) {
+    public AnomaliaResponseDTO alterarRisco(@PathVariable Long id, @Valid @RequestBody AlteracaoRiscoRequest dto, Authentication authentication) {
 
-         AnomaliaResponseDTO anomaliaAlterarRisco = anomaliaService.alterarRisco(id, dto);
+         AnomaliaResponseDTO anomaliaAlterarRisco = anomaliaService.alterarRisco(id, dto, authentication.getName());
 
         return anomaliaAlterarRisco;
 
@@ -120,9 +120,9 @@ public class AnomaliaController {
 
 
     @PatchMapping("/{id}/status")
-    public AnomaliaResponseDTO alterarStatus(@PathVariable Long id, @Valid @RequestBody AlteracaoStatusAnomaliaRequest dto) {
+    public AnomaliaResponseDTO alterarStatus(@PathVariable Long id, @Valid @RequestBody AlteracaoStatusAnomaliaRequest dto, Authentication authentication) {
 
-        AnomaliaResponseDTO anomaliaAlterarRisco = anomaliaService.alterarStatusAnomalia(id, dto);
+        AnomaliaResponseDTO anomaliaAlterarRisco = anomaliaService.alterarStatusAnomalia(id, dto, authentication.getName());
 
         return anomaliaAlterarRisco;
 

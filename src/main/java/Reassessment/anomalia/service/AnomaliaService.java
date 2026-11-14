@@ -137,7 +137,7 @@ public class AnomaliaService {
     // -----------------------------------
 
     @Transactional
-    public AnomaliaResponseDTO criar(AnomaliaRequestDTO dto) {
+    public AnomaliaResponseDTO criar(AnomaliaRequestDTO dto, String username) {
 
         Optional<EventoHIstorico> evento = eventoRepository.findById(dto.getEventoID());
 
@@ -155,7 +155,7 @@ public class AnomaliaService {
         Anomalia salva = anomaliaRepository.save(anomalia);
 
 
-         historicoService.registrar(salva.getId(), tipoRegistro.ANOMALIA_REGISTRADA, "sistema", "Anomalia no evento" + evento.get().getTitulo(), salva.getObservacoes(), salva.getRisco().name());
+         historicoService.registrar(salva.getId(), tipoRegistro.ANOMALIA_REGISTRADA, username, "Anomalia no evento " + evento.get().getTitulo(), null, salva.getRisco().name());
 
         return new AnomaliaResponseDTO(salva);
         }
@@ -183,7 +183,7 @@ public class AnomaliaService {
 
 
     @Transactional
-    public AnomaliaResponseDTO alterarRisco(Long id, AlteracaoRiscoRequest requestDto) {
+    public AnomaliaResponseDTO alterarRisco(Long id, AlteracaoRiscoRequest requestDto, String username) {
 
         Anomalia anomalia = buscarEntidade(id);
 
@@ -194,7 +194,7 @@ public class AnomaliaService {
 
         anomalia.setRisco(requestDto.getRisco()); 
 
-        historicoService.registrar(id, tipoRegistro.RISCO_ALTERADO, "Sistema", "Risco Alterado", riscoAnomaliaAntigo.name(), anomalia.getRisco().name());
+        historicoService.registrar(id, tipoRegistro.RISCO_ALTERADO, username, "Risco Alterado", riscoAnomaliaAntigo.name(), anomalia.getRisco().name());
     
         return new AnomaliaResponseDTO(anomalia);
     }
@@ -202,7 +202,7 @@ public class AnomaliaService {
     // -----------------------------------
 
     @Transactional
-    public AnomaliaResponseDTO alterarStatusAnomalia(Long id, AlteracaoStatusAnomaliaRequest requestDto) {
+    public AnomaliaResponseDTO alterarStatusAnomalia(Long id, AlteracaoStatusAnomaliaRequest requestDto, String username) {
 
 
         Anomalia anomalia = buscarEntidade(id);
@@ -232,7 +232,7 @@ public class AnomaliaService {
         
         anomalia.setStatus(valorNovo);
         
-        historicoService.registrar(id, tipoRegistro.STATUS_ALTERADO, "Sistema", "Status alterado", valorAntigo.name(), valorNovo.name());
+        historicoService.registrar(id, tipoRegistro.STATUS_ALTERADO, username, "Status alterado", valorAntigo.name(), valorNovo.name());
     
         return new AnomaliaResponseDTO(anomalia);
     }
